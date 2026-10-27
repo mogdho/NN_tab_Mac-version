@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NN Tab Settings</title>
+    <link rel="icon" type="image/png" href="tab.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            width: 320px;
+            background: var(--bg-pure-black);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* ── Card ── */
+        .card {
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ── Header ── */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-header img {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 6px rgba(168, 199, 250, 0.2));
+        }
+        .card-header .header-text h1 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+        .card-header .header-text p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        /* ── Section ── */
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .section-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-secondary);
+        }
+
+        /* ── Theme Row ── */
+        .theme-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+        .theme-row .label-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .theme-row .label-group .material-symbols-outlined {
+            font-size: 20px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        .theme-row span.label-text {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* ── Toggle Switch ── */
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle .slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            transition: background 0.25s ease;
+        }
+        .toggle .slider::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 18px;
+            height: 18px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transition: transform 0.25s ease;
+        }
+        .toggle input:checked + .slider {
+            background: #a8c7fa;
+        }
+        .toggle input:checked + .slider::before {
+            transform: translateX(18px);
+            background: #1a1a1a;
+        }
+
+        /* ── Wallpaper Row ── */
+        .wallpaper-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+        .wallpaper-preview-box {
+            width: 48px;
+            height: 32px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+        .wallpaper-preview-box .material-symbols-outlined {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        .wallpaper-actions {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+        .btn-remove {
+            background: rgba(255, 180, 171, 0.1);
+            color: #ffb4ab;
+            border: 1px solid rgba(255, 180, 171, 0.2);
+            padding: 8px 14px;
+            flex: unset;
+        }
+        .btn-remove:hover {
+            background: rgba(255, 180, 171, 0.2);
+        }
+
+        /* ── Buttons ── */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+        }
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 0;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn .material-symbols-outlined {
+            font-size: 16px;
+        }
+        .btn-export {
+            background: #a8c7fa;
+            color: #0e1117;
+        }
+        .btn-export:hover {
+            background: #c4dbff;
+            box-shadow: 0 2px 12px rgba(168, 199, 250, 0.25);
+        }
+        .btn-import {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-import:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .btn-import input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 0;
+        }
+
+        /* ── Status ── */
+        .status-msg {
+            font-size: 11px;
+            min-height: 16px;
+            text-align: center;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        .status-msg.success { color: #a8c7fa; }
+        .status-msg.error   { color: #ffb4ab; }
+
+        /* ── Full-page mode (Safari opens Settings in a tab, not a popup) ── */
+        body.full-page {
+            width: auto;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 48px 16px;
+        }
+        body.full-page .card {
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+
+        .access-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* ── Footer ── */
+        .card-footer {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            padding-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- Header -->
+        <div class="card-header">
+            <img src="tab.png" alt="NN Tab">
+            <div class="header-text">
+                <h1>NN Tab Settings</h1>
+                <p>Theme & backup controls</p>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Website Access Section (hidden once granted) -->
+        <div class="section" id="access-section" style="display:none;">
+            <span class="section-label">Website Access</span>
+            <p class="access-text">Allow access to all websites so bookmark icons can be fetched.</p>
+            <div class="btn-row">
+                <button id="access-btn" class="btn btn-export">
+                    <span class="material-symbols-outlined">public</span>
+                    Allow on all websites
+                </button>
+            </div>
+        </div>
+
+        <!-- Theme Section -->
+        <div class="section">
+            <span class="section-label">Appearance</span>
+            <div class="theme-row">
+                <div class="label-group">
+                    <span id="theme-icon" class="material-symbols-outlined">dark_mode</span>
+                    <span class="label-text" id="theme-label">Dark Mode</span>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Wallpaper Section -->
+        <div class="section">
+            <span class="section-label">Wallpaper</span>
+            <div class="wallpaper-row">
+                <div id="wallpaper-preview" class="wallpaper-preview-box">
+                    <span class="material-symbols-outlined" id="wallpaper-icon">wallpaper</span>
+                </div>
+                <div class="wallpaper-actions">
+                    <label class="btn btn-import" style="flex: unset; padding: 8px 14px;">
+                        <span class="material-symbols-outlined">upload</span>
+                        Set Image
+                        <input type="file" id="wallpaper-file" accept="image/*">
+                    </label>
+                    <button id="wallpaper-remove" class="btn btn-remove" style="display:none;">
+                        <span class="material-symbols-outlined">delete</span>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Backup Section -->
+        <div class="section">
+            <span class="section-label">Backup & Restore</span>
+            <div class="btn-row">
+                <button id="export-btn" class="btn btn-export">
+                    <span class="material-symbols-outlined">download</span>
+                    Export
+                </button>
+                <label class="btn btn-import">
+                    <span class="material-symbols-outlined">upload</span>
+                    Import
+                    <input type="file" id="import-file" accept=".json">
+                </label>
+            </div>
+            <p id="status-msg" class="status-msg"></p>
+        </div>
+
+        <div class="card-footer">Made by Sandip Pal</div>
+    </div>
+
+    <script type="module" src="js/backup.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+import { showToast } from './toast.js';
+
+export function initQuotes() {
+    const quoteWidget = document.getElementById('quote-widget');
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+
+    chrome.storage.local.get(['userQuote'], (res) => {
+        if (res.userQuote) {
+            quoteText.textContent = `"${res.userQuote.text}"`;
+            quoteAuthor.textContent = `— ${res.userQuote.author}`;
+        }
+    });
+
+    // Context Menu to edit
+    quoteWidget.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        openQuoteModal();
+    });
+
+    // Double-click also edits (easier on a Mac trackpad than right-click)
+    quoteWidget.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        openQuoteModal();
+    });
+
+    setupQuoteModalHandlers();
+}
+
+let quoteHandlersInitialized = false;
+
+function setupQuoteModalHandlers() {
+    if (quoteHandlersInitialized) return;
+    quoteHandlersInitialized = true;
+
+    const cancelBtn = document.getElementById('quote-cancel');
+    const saveBtn = document.getElementById('quote-save');
+    if (!cancelBtn || !saveBtn) return;
+
+    cancelBtn.addEventListener('click', closeQuoteModal);
+    saveBtn.addEventListener('click', saveQuoteModal);
+
+    // Close on overlay click
+    const modalOverlay = document.getElementById('quote-modal');
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeQuoteModal();
+    });
+}
+
+function openQuoteModal() {
+    const modal = document.getElementById('quote-modal');
+    const textInput = document.getElementById('quote-input-text');
+    const authorInput = document.getElementById('quote-input-author');
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+
+    modal.classList.remove('hidden');
+    
+    // Extract current text for editing
+    let currentText = quoteText.textContent;
+    if (currentText.startsWith('"') && currentText.endsWith('"')) {
+        currentText = currentText.slice(1, -1);
+    }
+    let currentAuthor = quoteAuthor.textContent;
+    if (currentAuthor.startsWith('— ')) {
+        currentAuthor = currentAuthor.slice(2);
+    }
+
+    textInput.value = currentText;
+    authorInput.value = currentAuthor;
+}
+
+function closeQuoteModal() {
+    document.getElementById('quote-modal').classList.add('hidden');
+}
+
+function saveQuoteModal() {
+    const text = document.getElementById('quote-input-text').value.trim();
+    const author = document.getElementById('quote-input-author').value.trim();
+
+    if (!text) return showToast('Quote text is required', 'error');
+
+    const quoteData = { text, author: author || 'Unknown' };
+    
+    chrome.storage.local.set({ userQuote: quoteData });
+
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+    
+    quoteText.textContent = `"${quoteData.text}"`;
+    quoteAuthor.textContent = `— ${quoteData.author}`;
+
+    closeQuoteModal();
+}

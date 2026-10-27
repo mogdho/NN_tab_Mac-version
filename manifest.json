@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "NN Tab",
+  "version": "1.21",
+  "description": "A minimalist, dark-themed dashboard for your new tab.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "action": {
+    "default_popup": "backup.html",
+    "default_title": "NN Tab Settings"
+  },
+  "icons": {
+    "16": "tab.png",
+    "48": "tab.png",
+    "128": "tab.png"
+  }
+}

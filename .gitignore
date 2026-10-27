@@ -1,0 +1,10 @@
+# Build output
+dist/
+safari-app/build/
+
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+
+# macOS
+.DS_Store
