@@ -2,6 +2,10 @@
   <img src="tab.png" alt="NN Tab Logo" width="80" />
 </p>
 
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=40&pause=1000&color=007ACC&center=true&vCenter=true&width=1000&lines=Thanks+Sandip+for+developing+the+iOS+version" alt="Animated Text" />
+</div>
+
 <h1 align="center">NN Tab</h1>
 
 <p align="center">
